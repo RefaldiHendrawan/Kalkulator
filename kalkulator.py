@@ -1,93 +1,93 @@
-from tkinter import*
+from tkinter import *
 
-window =Tk()
+window = Tk()
+window.title("Kalkulator Python")
+window.attributes('-fullscreen', True)  
 
 def tombol_klik(item):
-	global expression
-	expression=expression +str(item)
-	input_text.set (expression)
+    global ekspresi
+    ekspresi += str(item)
+    input_text.set(ekspresi)
+    label2.config(fg="white", bg="gray") 
 
-def bt_clear():
-	global expression
-	expression = ""
-	input_text.set("")
-	
-def bt_equal():
-	global expression
-	result = str(eval(expression))
-	input_text.set(result)
-	expression = ""
-	
-expression= ""
-input_text=StringVar()
+def tombol_hapus():
+    global ekspresi
+    ekspresi = ""
+    input_text.set("")
+    label2.config(fg="black", bg="white") 
 
-frame1 = Frame(window,bg="blue", width=500, height=300)
-frame1.pack(padx=20, pady=20)
+def tombol_samadengan():
+    global ekspresi
+    try:
+        hasil = str(eval(ekspresi.replace('%', '/100')))  
+        
+        input_text.set(hasil)
+        ekspresi = ""
+        label2.config(fg="black", bg="white")  
+        
+    except:
+        input_text.set("Salah Bang")
+        ekspresi = ""
+        label2.config(fg="black", bg="white")  
 
-frame2 = Frame(window,bg="turquoise", width=500,height=300)
-frame2.pack(padx=20,pady=30)
+def tombol_ubah_tanda():
+    global ekspresi
+    if ekspresi and ekspresi[0] == '-':
+        ekspresi = ekspresi[1:] 
+    else:
+        ekspresi = '-' + ekspresi 
+    input_text.set(ekspresi)
 
-label= Label(frame1, text="Hello, ini adalah Label di Tkinter!")
-label.pack(padx=20, pady=20)
+def tombol_persen():
+    global ekspresi
+    ekspresi += "%"  
+    input_text.set(ekspresi)
 
-label2 = Label (frame1, text ="Halo, ini Muhammar Refaldi Hendrawan XII PPLG 1",textvariable=input_text)
-label2 .pack(padx=20, pady=20)
+ekspresi = ""
+input_text = StringVar()
 
-button1 = Button(frame2, text="C",command=lambda:bt_clear(),width=10,bg="grey",fg="white")
-button1.grid(row=1,column=1,columnspan=2, pady= 20, padx = 20)
+frame = Frame(window, bg="white")
+frame.pack(fill="both", expand=False)
 
+frame2 = Frame(window, bg="black")
+frame2.pack(fill="both", expand=True)
 
-button3 = Button(frame2, text="/",command=lambda:tombol_klik("/"),bg="grey",fg="white")
-button3.grid(row=1,column=3, pady= 20, padx = 20)
+label = Label(frame, text="Kalkulator Refaldi PPLG 1", font=("Arial", 17), bg="orange")
+label.pack(pady=5)
 
-button4 = Button(frame2, text="*",command=lambda:tombol_klik("*"),
-bg="grey",fg="white")
-button4.grid(row=1,column=4, pady= 20, padx = 20)
+label2 = Label(frame, textvariable=input_text, font=("Arial", 32), bg="white", width=24, height=2, anchor='e', justify='right')
+label2.pack(pady=5)
 
-button5= Button(frame2, text="7",command=lambda:tombol_klik("7"))
-button5.grid(row=2,column=1, pady= 20, padx = 20)
+def create_button(text, command, row, col, colspan=1, rowspan=1, bg="lightgray", fg="black", font_size=17):
+    Button(frame2, text=text, command=command, width=5, height=2, bg=bg, fg=fg, font=("Arial", font_size)).grid(
+        row=row, column=col, columnspan=colspan, rowspan=rowspan, padx=2, pady=2, sticky="nsew"
+    )
 
-button6= Button(frame2, text="8",command=lambda:tombol_klik("8"))
-button6.grid(row=2,column=2, pady= 20, padx = 20)
+create_button("AC", tombol_hapus, 0, 0, colspan=1, bg="black", fg="white", font_size=18)
+create_button("+/-", tombol_ubah_tanda, 0, 1, colspan=1, bg="black", fg="white", font_size=18)
+create_button("%", tombol_persen, 0, 2, colspan=1, bg="black", fg="white", font_size=18)
 
-button7= Button(frame2, text="9",command=lambda:tombol_klik("9"))
-button7.grid(row=2,column=3, pady= 20, padx = 20)
+create_button("÷", lambda: tombol_klik("/"), 0, 3, bg="orange", fg="white", font_size=18)
+create_button("*", lambda: tombol_klik("*"), 1, 3, bg="orange", fg="white", font_size=18)  
+create_button("-", lambda: tombol_klik("-"), 2, 3, bg="orange", fg="white", font_size=18) 
+create_button("+", lambda: tombol_klik("+"), 3, 3, bg="orange", fg="white", font_size=18) 
+create_button("=", tombol_samadengan, 4, 3, bg="orange", fg="white", font_size=18)  
 
-button8= Button(frame2, text="+",
-bg="grey",fg="white",command=lambda:tombol_klik("+"))
-button8.grid(row=2,column=4, pady= 20, padx = 20)
+create_button(",", lambda: tombol_klik(","), 4, 2, bg="gray", fg="white", font_size=18)  
+create_button("0", lambda: tombol_klik("0"), 4, 0, colspan=2, bg="gray", fg="white", font_size=18)
+create_button("1", lambda: tombol_klik("1"), 3, 0, bg="gray", fg="white", font_size=18)
+create_button("2", lambda: tombol_klik("2"), 3, 1, bg="gray", fg="white", font_size=18)
+create_button("3", lambda: tombol_klik("3"), 3, 2, bg="gray", fg="white", font_size=18)
+create_button("4", lambda: tombol_klik("4"), 2, 0, bg="gray", fg="white", font_size=18)
+create_button("5", lambda: tombol_klik("5"), 2, 1, bg="gray", fg="white", font_size=18)
+create_button("6", lambda: tombol_klik("6"), 2, 2, bg="gray", fg="white", font_size=18)
+create_button("7", lambda: tombol_klik("7"), 1, 0, bg="gray", fg="white", font_size=18)
+create_button("8", lambda: tombol_klik("8"), 1, 1, bg="gray", fg="white", font_size=18)
+create_button("9", lambda: tombol_klik("9"), 1, 2, bg="gray", fg="white", font_size=18)
 
-button9= Button(frame2, text="4",command=lambda:tombol_klik("4"))
-button9.grid(row=3,column=1, pady= 20, padx = 20)
-
-button10= Button(frame2, text="5",command=lambda:tombol_klik("5"))
-button10.grid(row=3,column=2, pady= 20, padx = 20)
-
-button11= Button(frame2, text="6",command=lambda:tombol_klik("6"))
-button11.grid(row=3,column=3, pady= 20, padx = 20)
-
-button12= Button(frame2, text="-",
-bg="grey",fg="white",command=lambda:tombol_klik("-"))
-button12.grid(row=3,column=4, pady= 20, padx = 20)
-
-button13= Button(frame2, text="1",command=lambda:tombol_klik("1"))
-button13.grid(row=4,column=1, pady= 20, padx = 20)
-
-button14= Button(frame2, text="2",command=lambda:tombol_klik("2"))
-button14.grid(row=4,column=2, pady= 20, padx = 20)
-
-button15= Button(frame2, text="3",command=lambda:tombol_klik("3"))
-button15.grid(row=4,column=3, pady= 20, padx = 20)
-
-button16= Button(frame2, text="=",command=lambda:bt_equal(),height=5,
-bg="grey",fg="white")
-button16.grid(row=4,column=4,rowspan=2, pady= 20, padx = 20)
-
-button17= Button(frame2, text="0",width=10,command=lambda:tombol_klik("0"))
-button17.grid(row=5,column=1, columnspan=2, pady= 20, padx = 20)
-
-button19= Button(frame2, text=".",command=lambda:tombol_klik("."))
-button19.grid(row=5,column=3, pady= 20, padx = 20)
-
+for i in range(5):
+    frame2.grid_columnconfigure(i, weight=1)
+for i in range(5):
+    frame2.grid_rowconfigure(i, weight=1)
 
 window.mainloop()
